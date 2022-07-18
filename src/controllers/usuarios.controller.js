@@ -39,9 +39,10 @@ function agregarUsuario(req, res) {
     var parametros = req.body;
     var usuarioModelo = new Usuarios();
 
-    if (parametros.nombre && parametros.email && parametros.password) {
+    if (parametros.nombre && parametros.email && parametros.telefono && parametros.password) {
         usuarioModelo.nombre = parametros.nombre;
         usuarioModelo.email = parametros.email;
+        usuarioModelo.telefono = parametros.telefono;
         usuarioModelo.password = parametros.password;
         usuarioModelo.rol = 'Cliente';
 
@@ -94,6 +95,8 @@ function buscarUsuario(req, res) {
         return res.status(200).send({ usuario: usuarioEncontrado })
     })
 }
+
+
 module.exports = {
     Login,
     agregarUsuario,
