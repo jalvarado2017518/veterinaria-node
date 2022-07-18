@@ -3,24 +3,24 @@ const bcrypt = require('bcrypt-nodejs');
 const jwt = require('../services/jwt')
 
 
- function Login(req, res) {
+function Login(req, res) {
     var parametros = req.body;
-    Usuarios.findOne({ email: parametros.email }, (err, empresaEncontrada) => {
+    Usuarios.findOne({ email: parametros.email }, (err, usuariosEncontrado) => {
         if (err) return res.status(500).send({ mensaje: "Error en la petición" });
-        if (empresaEncontrada) {
+        if (usuariosEncontrado) {
              // COMPARO CONTRASENA SIN ENCRIPTAR CON LA ENCRIPTADA
-            bcrypt.compare(parametros.password, empresaEncontrada.password,
+            bcrypt.compare(parametros.password, usuariosEncontrado.password,
                 (err, verificacionPassword) => {
                         // VERIFICO SI EL PASSWORD COINCIDE EN BASE DE DATOS
                     if (verificacionPassword) {
                              // SI EL PARAMETRO OBTENERTOKEN ES TRUE, CREA EL TOKEN
                         if (parametros.obtenerToken === 'true') {
                             return res.status(200)
-                                .send({ token: jwt.crearToken(empresaEncontrada) })
+                                .send({ token: jwt.crearToken(usuariosEncontrado) })
                         } else {
-                            empresaEncontrada.password = undefined;
+                            usuariosEncontrado.password = undefined;
                             return res.status(200)
-                                .send({ empresa: empresaEncontrada })
+                                .send({ usuario: usuariosEncontrado })
                         }
                     } else {
                         return res.status(500)
