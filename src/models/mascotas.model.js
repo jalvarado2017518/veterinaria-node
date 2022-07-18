@@ -4,8 +4,7 @@ var Schema = mongoose.Schema;
 var MascotaSchema = Schema({
     nombreMascota: String,
     tipo: String,
-    cantidad: Number,
-    stock: Number,
+    disponible: Boolean,
     idUsuario: { type: Schema.Types.ObjectId, ref: 'Usuarios'}
 });
 
