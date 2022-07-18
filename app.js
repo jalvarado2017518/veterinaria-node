@@ -4,7 +4,7 @@ const cors = require('cors');
 var app = express();
 
 // IMPORTACIONES RUTAS
-//const ClientesRutas = require('./src/routes/clientes.routes');
+const CitasRutas = require('./src/routes/citas.routes');
 const MascotasRutas = require('./src/routes/mascotas.routes');
 const ProductosRutas = require('./src/routes/productos.routes');
 const UsuariosRutas = require('./src/routes/usuarios.routes');
@@ -17,8 +17,8 @@ app.use(express.json());
 app.use(cors());
 
 // CARGA DE RUTAS localhost:3000/api/obtenerProductos
-//pp.use('/api', ClientesRutas, , , );
-app.use('/api', UsuariosRutas, ProductosRutas, MascotasRutas);
+
+app.use('/api', UsuariosRutas, ProductosRutas, MascotasRutas, CitasRutas);
 
 
 module.exports = app;
