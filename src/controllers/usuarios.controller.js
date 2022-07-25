@@ -45,6 +45,7 @@ function agregarUsuario(req, res) {
         usuarioModelo.telefono = parametros.telefono;
         usuarioModelo.password = parametros.password;
         usuarioModelo.rol = 'Cliente';
+        usuarioModelo.mascota = parametros.mascota;
 
         Usuarios.find({ email: parametros.email }, (err, clienteRegistrado) => {
             if (clienteRegistrado.length == 0) {
@@ -65,7 +66,7 @@ function agregarUsuario(req, res) {
     }
 
 }
-function editarUsuario(req, res) {
+function editarUsuarioAdmin(req, res) {
     var idUsuario = req.params.idUsuario;
     var parametros = req.body;
     Usuarios.findByIdAndUpdate(idUsuario, parametros, { new: true }, (err, usuarioActualizado) => {
@@ -76,31 +77,53 @@ function editarUsuario(req, res) {
 
 }
 
+function editarUsuario (req, res) {
+    var idUser = req.params.idEmpresa;
+    var parametros = req.body;
+
+    Usuarios.findByIdAndUpdate(req.user.sub, parametros, { new: true } ,(err, usuarioActualizado) => {
+        if (err) return res.status(500).send({ mensaje: 'Error en la peticion'});
+        if(!usuarioActualizado) return res.status(404).send( { mensaje: 'Error al Editar el usuario'});
+
+        return res.status(200).send({ usuario: usuarioActualizado});
+    });
+}
+
 function eliminarUsuario(req, res) {
-    var id = req.params.idUsuario;
-    Usuarios.findByIdAndDelete(id, (err, usuarioEliminado) => {
+    var idUser = req.params.idUsuario;
+
+    Usuarios.findByIdAndDelete(idUser, (err, usuarioEliminado) => {
+        if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+        if (!usuarioEliminado) return res.status(500).send({ mensaje: "Error al eliminar este usuario, intenta de nuevo" });
+        return res.status(200).send({ usuario: usuarioEliminado });
+    })
+}
+
+function ObtenerUsuarios(req,res){
+    Usuarios.find((err,usuariosObtenidos)=>{
+        if(err) return res.send({mensaje: "Error: " + err})
+
+        return res.send({usuarios: usuariosObtenidos})
+    })
+}
+
+function ObtenerUsuarioId(req, res) {
+    var idUser = req.params.idUsuario;
+
+    Usuarios.findById(idUser, (err, usuarioEcontrado) => {
         if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
-        if (!usuarioEliminado) return res.status(404).send({ mensaje: 'Error al eliminar el usuario' });
-        return res.status(200).send({ usuario: usuarioEliminado })
-    })
+        if (!usuarioEcontrado) return res.status(500).send( { mensaje: 'Error al obtener los datos' });
 
-}
-
-function buscarUsuario(req, res) {
-    Usuarios.find((err, usuarioEncontrado) => {
-        if (err) return res.send({ mensaje: "Error: " + err })
-        for (let i = 0; i < usuarioEncontrado.length; i++) {
-
-        }
-        return res.status(200).send({ usuario: usuarioEncontrado })
+        return res.status(200).send({ usuario: usuarioEcontrado });
     })
 }
-
 
 module.exports = {
     Login,
     agregarUsuario,
     editarUsuario,
     eliminarUsuario,
-    buscarUsuario
+    ObtenerUsuarios,
+    ObtenerUsuarioId,
+    editarUsuarioAdmin
 }

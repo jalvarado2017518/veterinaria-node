@@ -10,6 +10,7 @@ api.put('/editarProducto/:idProducto', productosController.editarProducto);
 api.post('/agregarProducto', productosController.agregarProducto);
 api.delete('/eliminarProducto/:idProducto',productosController.eliminarProducto);
 api.get('/productos',md_autenticacion.Auth, productosController.obtenerProductos);
+api.get('/productos/:idProducto', productosController.ObtenerProductosId);
 
 
 

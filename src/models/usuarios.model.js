@@ -6,7 +6,8 @@ const UsuariosSchema = Schema({
     email: String,
     telefono: Number,
     password: String,
-    rol: String
+    rol: String,
+    mascota: String,
 });
 
 module.exports = mongoose.model('Usuarios', UsuariosSchema);

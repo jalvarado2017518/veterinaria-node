@@ -7,9 +7,8 @@ function agregarMascota(req, res) {
             if (err) return res.status(404).send({ mensaje: 'Error en la peticion'});
                 let mascotasModel = new Mascotas();
                 mascotasModel.nombreMascota = parametros.nombreMascota;
+                mascotasModel.descripcion = parametros.descripcion;
                 mascotasModel.tipo = parametros.tipo;
-                mascotasModel.disponible = true;
-                mascotasModel.idUsuario = req.user.sub;
                 mascotasModel.save((err, mascotaGuardada) => {
                     if (err) return res.status(404).send({ mensaje: 'Error en la peticion' });
                     return res.status(200).send({ mascotas: mascotaGuardada })
@@ -46,26 +45,30 @@ function eliminarMascota(req, res) {
 }
 
 function obtenerMascotas (req, res) {
-    if (req.user.rol == "SuperAdmin") {
         Mascotas.find((err, mascotasObtenidas) => {
         if (err) return res.send({ mensaje: "Error: " + err })
 
         return res.send({ mascotas: mascotasObtenidas })
 
     })
-    }else{
-        Mascotas.find({idUsuario: req.user.sub},(err, mascotasObtenidas) => {
-            if (err) return res.send({ mensaje: "Error: " + err })
     
-            return res.send({ mascotas: mascotasObtenidas })
-    
-        })
-    }
+}
+
+function ObtenerMascotasId(req, res) {
+    var idMasc = req.params.idMascota;
+
+    Mascotas.findById(idMasc, (err, mascotaEncontrado) => {
+        if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
+        if (!mascotaEncontrado) return res.status(500).send( { mensaje: 'Error al obtener los datos' });
+
+        return res.status(200).send({ mascota: mascotaEncontrado });
+    })
 }
 
 module.exports = {
     obtenerMascotas,
     agregarMascota,
     editarMascota,
-    eliminarMascota
+    eliminarMascota,
+    ObtenerMascotasId
 }

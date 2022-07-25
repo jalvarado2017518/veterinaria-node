@@ -5,15 +5,14 @@ function agendarCita(req, res) {
     var parametros = req.body;
     var citaModel = new Citas();
 
-    if(parametros.email && parametros.fecha  && parametros.horaInicio && parametros.horaFin){
+    if(parametros.email && parametros.fecha ){
         citaModel.nombre = parametros.nombre;
         citaModel.telefono = parametros.telefono;
         citaModel.email = parametros.email;
         citaModel.mensaje = parametros.mensaje;
         citaModel.fecha = parametros.fecha;
-        citaModel.horaInicio = parametros.horaInicio;
-        citaModel.horaFin = parametros.horaFin;
-        citaModel.idUsuario = req.user.sub;
+        citaModel.hora = parametros.hora;
+        citaModel.mascota = parametros.mascota;
         
         citaModel.save((err, citaGuaradada) => {
             if (err) return res.status(500).send({message: 'Error en la peticion'});
@@ -35,7 +34,7 @@ function obtenerCitas (req, res) {
 
     })
     }else{
-        Citas.find({idUsuario: req.user.sub},(err, citasObtenidas) => {
+        Citas.find({email: req.user.email},(err, citasObtenidas) => {
             if (err) return res.send({ mensaje: "Error: " + err })
     
             return res.send({ citas: citasObtenidas })

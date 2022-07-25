@@ -46,26 +46,30 @@ function eliminarProducto(req, res) {
 }
 
 function obtenerProductos (req, res) {
-    if (req.user.rol == "SuperAdmin") {
         Productos.find((err, productosObtenidos) => {
         if (err) return res.send({ mensaje: "Error: " + err })
 
         return res.send({ productos: productosObtenidos })
 
     })
-    }else{
-        Productos.find({idEmpresa: req.user.sub},(err, productosObtenidos) => {
-            if (err) return res.send({ mensaje: "Error: " + err })
     
-            return res.send({ productos: productosObtenidos })
-    
-        })
-    }
+}
+
+function ObtenerProductosId(req, res) {
+    var idProd = req.params.idProducto;
+
+    Productos.findById(idProd, (err, productoEncontrado) => {
+        if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
+        if (!productoEncontrado) return res.status(500).send( { mensaje: 'Error al obtener los datos' });
+
+        return res.status(200).send({ producto: productoEncontrado });
+    })
 }
 
 module.exports = {
     obtenerProductos,
     agregarProducto,
     editarProducto,
-    eliminarProducto
+    eliminarProducto,
+    ObtenerProductosId
 }
