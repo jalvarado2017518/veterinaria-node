@@ -9,6 +9,8 @@ var CitasSchema = Schema({
     mensaje: String,
     fecha: String,
     hora: String,
+    pregunta1: String,
+    pregunta2: String
 });
 
 module.exports = mongoose.model('Citas', CitasSchema)

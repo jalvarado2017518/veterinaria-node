@@ -13,6 +13,9 @@ function agendarCita(req, res) {
         citaModel.fecha = parametros.fecha;
         citaModel.hora = parametros.hora;
         citaModel.mascota = parametros.mascota;
+        citaModel.pregunta1 = parametros.pregunta1;
+        citaModel.pregunta2 = parametros.pregunta2;
+
         
         citaModel.save((err, citaGuaradada) => {
             if (err) return res.status(500).send({message: 'Error en la peticion'});
@@ -53,8 +56,21 @@ function cancelarCita(req, res) {
     })
 }
 
+function ObtenerCitasId(req, res) {
+    var idDate = req.params.idCita;
+
+    Citas.findById(idDate, (err, citaEncontrada) => {
+        if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
+        if (!citaEncontrada) return res.status(500).send( { mensaje: 'Error al obtener los datos' });
+
+        return res.status(200).send({ cita: citaEncontrada });
+    })
+}
+
+
 module.exports = {
     agendarCita,
     obtenerCitas,
-    cancelarCita
+    cancelarCita,
+    ObtenerCitasId
 }

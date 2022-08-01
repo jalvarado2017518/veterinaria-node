@@ -7,5 +7,6 @@ const api = express.Router()
 api.post('/agendarCita',md_autenticacion.Auth, citasController.agendarCita);
 api.get('/citas',md_autenticacion.Auth, citasController.obtenerCitas);
 api.delete('/cancelarCita/:idCita', citasController.cancelarCita);
+api.get('/citas/:idCita', citasController.ObtenerCitasId);
 
 module.exports = api;
